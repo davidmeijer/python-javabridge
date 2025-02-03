@@ -133,17 +133,7 @@ def find_javahome():
         java_dir = get_out(["readlink", "-f", java_bin])
         java_version_string = get_out(["bash", "-c", "java -version"])
         if re.search('^openjdk', java_version_string, re.MULTILINE) is not None:
-            pattern = 'openjdk version "([^"]+)"'
-            match = re.search(pattern, java_version_string, re.MULTILINE)
-            if match:
-                version = match.groups()[0]
-                if version < "1.8":
-                    jdk_dir = os.path.join(java_dir, "..", "..", "..")
-                else:
-                    jdk_dir = os.path.join(java_dir, "..", "..")
-            else:
-                raise RuntimeError("Failed to parse version from %s" % 
-                                   java_version_string)
+            jdk_dir = os.path.join(java_dir, "..", "..", "..")
         elif re.search('^java', java_version_string, re.MULTILINE) is not None:
             jdk_dir = os.path.join(java_dir, "..", "..")
         else:
@@ -263,6 +253,7 @@ def find_jre_bin_jdk_so():
     """Finds the jre bin dir and the jdk shared library file"""
     jvm_dir = None
     java_home = find_javahome()
+    print("java_home", java_home)
     if java_home is not None:
         found_jvm = False
         for jre_home in (java_home, os.path.join(java_home, "jre"), os.path.join(java_home, 'default-java'), os.path.join(java_home, 'default-runtime')):
@@ -274,7 +265,9 @@ def find_jre_bin_jdk_so():
             for arch in arches:
                 for place_to_look in ('client','server'):
                     jvm_dir = os.path.join(jre_libexec, arch, place_to_look)
+                    print(jvm_dir)
                     jvm_so = os.path.join(jvm_dir, lib_prefix + "jvm" + lib_suffix)
+                    print(jvm_so)
                     if os.path.isfile(jvm_so):
                         return (jre_bin, jvm_so)
     return (jre_bin, None)
