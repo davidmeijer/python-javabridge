@@ -132,6 +132,7 @@ def find_javahome():
         java_bin = get_out(["bash", "-c", "type -p java"])
         java_dir = get_out(["readlink", "-f", java_bin])
         java_version_string = get_out(["bash", "-c", "java -version"])
+        print("java_version_string:", java_version_string)
         if re.search('^openjdk', java_version_string, re.MULTILINE) is not None:
             jdk_dir = os.path.join(java_dir, "..", "..", "..")
         elif re.search('^java', java_version_string, re.MULTILINE) is not None:
@@ -142,6 +143,7 @@ def find_javahome():
                 "OpenJDK and Oracle JDK are supported."
             )
         jdk_dir = os.path.abspath(jdk_dir)
+        print("jdk_dir:", jdk_dir)
         return jdk_dir
     elif is_win:
         # Registry keys changed in 1.9
@@ -253,7 +255,7 @@ def find_jre_bin_jdk_so():
     """Finds the jre bin dir and the jdk shared library file"""
     jvm_dir = None
     java_home = find_javahome()
-    print("java_home", java_home)
+    print("java_home:", java_home)
     if java_home is not None:
         found_jvm = False
         for jre_home in (java_home, os.path.join(java_home, "jre"), os.path.join(java_home, 'default-java'), os.path.join(java_home, 'default-runtime')):
@@ -265,9 +267,11 @@ def find_jre_bin_jdk_so():
             for arch in arches:
                 for place_to_look in ('client','server'):
                     jvm_dir = os.path.join(jre_libexec, arch, place_to_look)
-                    print(jvm_dir)
                     jvm_so = os.path.join(jvm_dir, lib_prefix + "jvm" + lib_suffix)
-                    print(jvm_so)
                     if os.path.isfile(jvm_so):
+                        print("jre_bin:", jre_bin)
+                        print("jvm_so:", jvm_so)
                         return (jre_bin, jvm_so)
+    print("jvm_dir:", jvm_dir)
+    print("java_home:", "None")
     return (jre_bin, None)
