@@ -134,7 +134,17 @@ def find_javahome():
         java_version_string = get_out(["bash", "-c", "java -version"])
         print("java_version_string:", java_version_string)
         if re.search('^openjdk', java_version_string, re.MULTILINE) is not None:
-            jdk_dir = os.path.join(java_dir, "..", "..", "..")
+            pattern = 'openjdk version "([^"]+)"'
+            match = re.search(pattern, java_version_string, re.MULTILINE)
+            if match:
+                version = match.groups()[0]
+                if version < "1.8":
+                    jdk_dir = os.path.join(java_dir, "..", "..", "..")
+                else:
+                    jdk_dir = os.path.join(java_dir, "..", "..")
+            else:
+                raise RuntimeError("Failed to parse version from %s" % 
+                                   java_version_string)
         elif re.search('^java', java_version_string, re.MULTILINE) is not None:
             jdk_dir = os.path.join(java_dir, "..", "..")
         else:
@@ -273,5 +283,5 @@ def find_jre_bin_jdk_so():
                         print("jvm_so:", jvm_so)
                         return (jre_bin, jvm_so)
     print("jvm_dir:", jvm_dir)
-    print("java_so:", "None")
+    print("java_so:", "not found")
     return (jre_bin, None)
