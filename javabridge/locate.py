@@ -272,10 +272,23 @@ def find_jre_bin_jdk_so():
             jre_bin = os.path.join(jre_home, 'bin')
             jre_libexec = os.path.join(jre_home, 'bin' if is_win else 'lib')
             arches = ('amd64', 'i386', '') if is_linux else ('',)
+            
+            # print arch of device
+            print("sys.maxsize:", sys.maxsize)
+            print("sys.platform:", sys.platform)
+            print("os.uname():", os.uname())
+            print("os.environ:", os.environ)
+            print("os.getenv('PROCESSOR_ARCHITECTURE'):", os.getenv('PROCESSOR_ARCHITECTURE'))
+            print("os.getenv('PROCESSOR_ARCHITEW6432'):", os.getenv('PROCESSOR_ARCHITEW6432'))
+            print("os.getenv('PROCESSOR_IDENTIFIER'):", os.getenv('PROCESSOR_IDENTIFIER'))
+            print("os.getenv('PROCESSOR_LEVEL'):", os.getenv('PROCESSOR_LEVEL'))
+            print("os.getenv('PROCESSOR_REVISION'):", os.getenv('PROCESSOR_REVISION'))
+            print("os.getenv('PROCESSOR_ARCHITEW6432'):", os.getenv('PROCESSOR_ARCHITEW6432'))
+            
             lib_prefix = '' if is_win else 'lib'
             lib_suffix = '.dll' if is_win else ('.dylib' if is_mac else '.so')
             for arch in arches:
-                print("arch:", arch)
+                print(f"arch: '{arch}'")
                 for place_to_look in ('client','server'):
                     print("looking in...", place_to_look)
                     jvm_dir = os.path.join(jre_libexec, arch, place_to_look)
