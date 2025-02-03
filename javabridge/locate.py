@@ -271,7 +271,7 @@ def find_jre_bin_jdk_so():
         for jre_home in (java_home, os.path.join(java_home, "jre"), os.path.join(java_home, 'default-java'), os.path.join(java_home, 'default-runtime')):
             jre_bin = os.path.join(jre_home, 'bin')
             jre_libexec = os.path.join(jre_home, 'bin' if is_win else 'lib')
-            arches = ('amd64', 'i386', '') if is_linux else ('',)
+            arches = ('arm64', 'amd64', 'i386', '') if is_linux else ('',)
             
             # print arch of device
             print("sys.maxsize:", sys.maxsize)
