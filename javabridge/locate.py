@@ -273,5 +273,5 @@ def find_jre_bin_jdk_so():
                         print("jvm_so:", jvm_so)
                         return (jre_bin, jvm_so)
     print("jvm_dir:", jvm_dir)
-    print("java_home:", "None")
+    print("java_so:", "None")
     return (jre_bin, None)
