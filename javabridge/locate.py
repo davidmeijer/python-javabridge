@@ -271,19 +271,13 @@ def find_jre_bin_jdk_so():
         for jre_home in (java_home, os.path.join(java_home, "jre"), os.path.join(java_home, 'default-java'), os.path.join(java_home, 'default-runtime')):
             jre_bin = os.path.join(jre_home, 'bin')
             jre_libexec = os.path.join(jre_home, 'bin' if is_win else 'lib')
-            arches = ('aarch64', 'amd64', 'i386', '') if is_linux else ('',)
+            arches = ('amd64', 'i386', '') if is_linux else ('',)
             
             # print arch of device
             print("sys.maxsize:", sys.maxsize)
             print("sys.platform:", sys.platform)
             print("os.uname():", os.uname())
             print("os.environ:", os.environ)
-            print("os.getenv('PROCESSOR_ARCHITECTURE'):", os.getenv('PROCESSOR_ARCHITECTURE'))
-            print("os.getenv('PROCESSOR_ARCHITEW6432'):", os.getenv('PROCESSOR_ARCHITEW6432'))
-            print("os.getenv('PROCESSOR_IDENTIFIER'):", os.getenv('PROCESSOR_IDENTIFIER'))
-            print("os.getenv('PROCESSOR_LEVEL'):", os.getenv('PROCESSOR_LEVEL'))
-            print("os.getenv('PROCESSOR_REVISION'):", os.getenv('PROCESSOR_REVISION'))
-            print("os.getenv('PROCESSOR_ARCHITEW6432'):", os.getenv('PROCESSOR_ARCHITEW6432'))
             
             lib_prefix = '' if is_win else 'lib'
             lib_suffix = '.dll' if is_win else ('.dylib' if is_mac else '.so')
@@ -293,12 +287,11 @@ def find_jre_bin_jdk_so():
                     print("looking in...", place_to_look)
                     jvm_dir = os.path.join(jre_libexec, arch, place_to_look)
                     jvm_so = os.path.join(jvm_dir, lib_prefix + "jvm" + lib_suffix)
-                    print("constructed jre_bin:", jre_bin)
-                    print("is jre_bin a file:" , os.path.isfile(jre_bin))
-                    print("constructed jvm_so:", jvm_so)
-                    print("is jvm_so a file:" , os.path.isfile(jvm_so))
+                    print(f"constructed jre_bin (is_file: {os.path.isfile(jre_bin)}):", jre_bin)
+                    print(f"constructed jvm_so (is_file: {os.path.isfile(jvm_so)}):", jvm_so)
                     if os.path.isfile(jvm_so):
                         return (jre_bin, jvm_so)
     print("jvm_dir:", jvm_dir)
     print("java_so:", "not found")
+
     return (jre_bin, None)
