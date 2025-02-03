@@ -275,12 +275,16 @@ def find_jre_bin_jdk_so():
             lib_prefix = '' if is_win else 'lib'
             lib_suffix = '.dll' if is_win else ('.dylib' if is_mac else '.so')
             for arch in arches:
+                print("arch:", arch)
                 for place_to_look in ('client','server'):
+                    print("looking in...", place_to_look)
                     jvm_dir = os.path.join(jre_libexec, arch, place_to_look)
                     jvm_so = os.path.join(jvm_dir, lib_prefix + "jvm" + lib_suffix)
+                    print("constructed jre_bin:", jre_bin)
+                    print("is jre_bin a file:" , os.path.isfile(jre_bin))
+                    print("constructed jvm_so:", jvm_so)
+                    print("is jvm_so a file:" , os.path.isfile(jvm_so))
                     if os.path.isfile(jvm_so):
-                        print("jre_bin:", jre_bin)
-                        print("jvm_so:", jvm_so)
                         return (jre_bin, jvm_so)
     print("jvm_dir:", jvm_dir)
     print("java_so:", "not found")
